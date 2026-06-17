@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 80" role="img" aria-labelledby="title desc">
+  <title id="title">Hermas</title>
+  <desc id="desc">Themed Hermas wordmark for the AI training tools grid</desc>
+  <rect width="240" height="80" rx="18" fill="#0b0f0c"/>
+  <path d="M34 54V26h8v10h20V26h8v28h-8V43H42v11z" fill="#cfff34"/>
+  <path d="M92 54V26h41v7h-33v4h29v7h-29v4h34v6zM145 54V26h27c8 0 13 4 13 11 0 5-3 9-8 10l10 7h-13l-9-7h-12v7zm8-14h18c4 0 6-1 6-4 0-2-2-3-6-3h-18zM198 54V26h9l17 17 17-17h9v28h-8V37l-15 15h-6l-15-15v17z" fill="#f6f7f2" transform="scale(.82 1) translate(0 0)"/>
+  <circle cx="218" cy="18" r="4" fill="#00a7b5"/>
+</svg>
