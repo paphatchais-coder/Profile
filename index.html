@@ -272,7 +272,7 @@
 
     /* ── SECTION ──────────────────────────────────── */
     .section { padding: 72px 0; }
-    .section + .section { border-top: 1px solid var(--border); }
+    .section + .section { border-top: none; }
 
     .sec-head {
       display: flex;
@@ -719,7 +719,7 @@
       transition: color .2s;
     }
     .footer-link:hover { color: var(--lime); }
-    .footer-divider { border: none; border-top: 1px solid var(--border); margin: 28px auto; max-width: 1100px; }
+    .footer-divider { display: none; }
     .footer-copy {
       text-align: center;
       font-size: 11px;
@@ -863,6 +863,88 @@
       .tagline-rule  { display: none; }
       .tagline-text  { font-size: 16px; }
     }
+
+    /* AI tools marquee */
+    .tools-marquee {
+      position: relative;
+      overflow: hidden;
+      padding: 18px 0;
+      background: rgba(10,10,12,.92);
+      border-bottom: 1px solid rgba(146,204,0,.12);
+    }
+    .tools-marquee::before,
+    .tools-marquee::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: min(140px, 16vw);
+      z-index: 2;
+      pointer-events: none;
+    }
+    .tools-marquee::before {
+      left: 0;
+      background: linear-gradient(90deg, var(--bg), transparent);
+    }
+    .tools-marquee::after {
+      right: 0;
+      background: linear-gradient(270deg, var(--bg), transparent);
+    }
+    .tools-track {
+      display: flex;
+      width: max-content;
+      gap: 12px;
+      animation: toolsScroll 42s linear infinite;
+    }
+    .tools-marquee:hover .tools-track { animation-play-state: paused; }
+    .tool-pill {
+      min-width: 164px;
+      height: 58px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 0 16px;
+      border: 1px solid rgba(146,204,0,.16);
+      border-radius: 8px;
+      background: linear-gradient(135deg, rgba(255,255,255,.055), rgba(255,255,255,.02));
+      color: var(--text);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.04);
+    }
+    .tool-pill img {
+      width: 28px;
+      height: 28px;
+      object-fit: contain;
+      filter: brightness(0) invert(1);
+      opacity: .9;
+      flex: 0 0 auto;
+    }
+    .tool-pill.wide img { width: 38px; }
+    .tool-pill span {
+      font-size: 12px;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+    .tool-pill small {
+      display: block;
+      margin-top: 1px;
+      color: var(--muted2);
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 9px;
+      font-weight: 600;
+      letter-spacing: .4px;
+      text-transform: uppercase;
+    }
+    @keyframes toolsScroll {
+      from { transform: translateX(-50%); }
+      to { transform: translateX(0); }
+    }
+    @media (max-width: 600px) {
+      .tools-marquee { padding: 14px 0; }
+      .tool-pill { min-width: 142px; height: 52px; padding: 0 12px; }
+      .tool-pill img { width: 24px; height: 24px; }
+      .tool-pill span { font-size: 11px; }
+      .tool-pill small { display: none; }
+    }
   </style>
 </head>
 <body>
@@ -914,7 +996,7 @@
         </div>
         <div class="stat">
           <span class="stat-num" data-target="400" data-suffix="+">400+</span>
-          <div class="stat-label">จำนวนผู้เข้าฟัง</div>
+          <div class="stat-label">ผู้เข้าฟังสะสม</div>
         </div>
         <div class="stat">
           <span class="stat-num" data-target="40" data-suffix="%">40%</span>
@@ -942,6 +1024,37 @@
     <span class="tagline-mono">// speaker statement</span>
     <div class="tagline-rule"></div>
     <p class="tagline-text">ถ่ายทอดออกมาจากประสบการณ์ของนักสร้าง AI เพื่อให้องค์กรของคุณนำไปต่อยอดได้ทันที</p>
+  </div>
+</div>
+
+<!-- AI TOOLS MARQUEE -->
+<div class="tools-marquee" aria-label="AI tools and platforms">
+  <div class="tools-track">
+    <div class="tool-pill"><img src="image/logos/chatgpt.png" alt="ChatGPT" /><div><span>ChatGPT</span><small>Prompt & Workflow</small></div></div>
+    <div class="tool-pill"><img src="image/logos/googlegemini.svg" alt="Gemini" /><div><span>Gemini</span><small>Workspace AI</small></div></div>
+    <div class="tool-pill"><img src="image/logos/claude.svg" alt="Claude" /><div><span>Claude</span><small>Reasoning</small></div></div>
+    <div class="tool-pill"><img src="image/logos/n8n.svg" alt="n8n" /><div><span>n8n</span><small>Automation</small></div></div>
+    <div class="tool-pill"><img src="image/logos/cursor.svg" alt="Cursor" /><div><span>Cursor</span><small>AI Coding</small></div></div>
+    <div class="tool-pill wide"><img src="image/logos/hermas.svg" alt="Hermas" /><div><span>Hermas</span><small>Agent Workflow</small></div></div>
+    <div class="tool-pill wide"><img src="image/logos/openclaw.svg" alt="OpenClaw" /><div><span>OpenClaw</span><small>Open Agent</small></div></div>
+    <div class="tool-pill"><img src="image/logos/githubcopilot.svg" alt="GitHub Copilot" /><div><span>Copilot</span><small>IDE Assistant</small></div></div>
+    <div class="tool-pill wide"><img src="image/logos/antigravity.svg" alt="Antigravity" /><div><span>Antigravity</span><small>Agent IDE</small></div></div>
+    <div class="tool-pill"><img src="image/logos/ollama.svg" alt="Ollama" /><div><span>Ollama</span><small>Local LLM</small></div></div>
+    <div class="tool-pill"><img src="image/logos/langchain.svg" alt="LangChain" /><div><span>LangChain</span><small>RAG / Chains</small></div></div>
+    <div class="tool-pill wide"><img src="image/logos/openai.svg" alt="OpenAI" /><div><span>OpenAI API</span><small>Integration</small></div></div>
+
+    <div class="tool-pill"><img src="image/logos/chatgpt.png" alt="" aria-hidden="true" /><div><span>ChatGPT</span><small>Prompt & Workflow</small></div></div>
+    <div class="tool-pill"><img src="image/logos/googlegemini.svg" alt="" aria-hidden="true" /><div><span>Gemini</span><small>Workspace AI</small></div></div>
+    <div class="tool-pill"><img src="image/logos/claude.svg" alt="" aria-hidden="true" /><div><span>Claude</span><small>Reasoning</small></div></div>
+    <div class="tool-pill"><img src="image/logos/n8n.svg" alt="" aria-hidden="true" /><div><span>n8n</span><small>Automation</small></div></div>
+    <div class="tool-pill"><img src="image/logos/cursor.svg" alt="" aria-hidden="true" /><div><span>Cursor</span><small>AI Coding</small></div></div>
+    <div class="tool-pill wide"><img src="image/logos/hermas.svg" alt="" aria-hidden="true" /><div><span>Hermas</span><small>Agent Workflow</small></div></div>
+    <div class="tool-pill wide"><img src="image/logos/openclaw.svg" alt="" aria-hidden="true" /><div><span>OpenClaw</span><small>Open Agent</small></div></div>
+    <div class="tool-pill"><img src="image/logos/githubcopilot.svg" alt="" aria-hidden="true" /><div><span>Copilot</span><small>IDE Assistant</small></div></div>
+    <div class="tool-pill wide"><img src="image/logos/antigravity.svg" alt="" aria-hidden="true" /><div><span>Antigravity</span><small>Agent IDE</small></div></div>
+    <div class="tool-pill"><img src="image/logos/ollama.svg" alt="" aria-hidden="true" /><div><span>Ollama</span><small>Local LLM</small></div></div>
+    <div class="tool-pill"><img src="image/logos/langchain.svg" alt="" aria-hidden="true" /><div><span>LangChain</span><small>RAG / Chains</small></div></div>
+    <div class="tool-pill wide"><img src="image/logos/openai.svg" alt="" aria-hidden="true" /><div><span>OpenAI API</span><small>Integration</small></div></div>
   </div>
 </div>
 
