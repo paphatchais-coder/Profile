@@ -207,7 +207,7 @@
       letter-spacing: 0;
       font-weight: 900;
     }
-    .h1-line { padding-top: 10px; display: block; transform: translateY(var(--shift, 0)); }
+    .h1-line { padding-top: 10px; padding-bottom: 4px; display: block; overflow: hidden; transform: translateY(var(--shift, 0)); }
     .h1-line:nth-child(2) { color: transparent; -webkit-text-stroke: 1px rgba(246,247,242,.58); }
     .hero-copy {
       max-width: 740px;
@@ -243,7 +243,7 @@
       cursor: pointer;
     }
     .btn.primary { color: #071006; border-color: transparent; background: linear-gradient(135deg, var(--lime-hi), var(--lime)); box-shadow: 0 18px 50px rgba(146,204,0,.18); }
-    .btn:hover { transform: translateY(-2px); border-color: rgba(207,255,52,.42); }
+    .btn:hover { transform: translateY(-4px) scale(1.02); border-color: rgba(207,255,52,.5); box-shadow: 0 14px 36px rgba(0,0,0,.32); }
     .portrait-card {
       position: relative;
       isolation: isolate;
@@ -253,7 +253,7 @@
       overflow: hidden;
       background: #111;
       box-shadow: 0 24px 80px rgba(0,0,0,.42);
-      transform: translateY(var(--portrait-y, 0));
+      transform: translateY(var(--portrait-y, 0)) perspective(900px) rotateY(var(--tilt-x, 0deg)) rotateX(var(--tilt-y, 0deg)) scale(var(--tilt-scale, 1));
     }
     .portrait-card::before {
       content: "";
@@ -339,7 +339,6 @@
       border: 1px solid rgba(225,245,199,.16);
       background: rgba(8,10,9,.76);
       box-shadow: 0 18px 58px rgba(0,0,0,.26);
-      transform: translateY(var(--card-y, 0));
     }
     .story-card::before { content: ""; position: absolute; inset: 0 auto 0 0; width: 3px; background: var(--tone, var(--lime-hi)); box-shadow: 0 0 20px var(--tone, var(--lime-hi)); }
     .story-card small { display: block; color: var(--dim); font: 700 10px/1 var(--mono); letter-spacing: .16em; text-transform: uppercase; margin-bottom: 10px; }
@@ -695,7 +694,7 @@
     .finale p { margin: 0; max-width: 720px; color: var(--muted); font-size: clamp(17px, 2vw, 22px); }
     .contact-row { display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; }
 
-    .reveal { opacity: 0; transform: translateY(36px); transition: opacity .75s ease, transform .75s ease; }
+    .reveal { opacity: 0; transform: translateY(44px); transition: opacity .85s cubic-bezier(.16,1,.3,1), transform .85s cubic-bezier(.16,1,.3,1); }
     .reveal.in-view { opacity: 1; transform: translateY(0); }
 
     @media (max-width: 920px) {
@@ -721,7 +720,8 @@
       .portrait-card, .portrait-card img { min-height: 430px; }
       .scroll-cue { display: none; }
       .chapter { min-height: auto; }
-      .stat-strip, .audience-grid, .offer-grid, .tool-grid, .product-proof { grid-template-columns: 1fr; }
+      .stat-strip, .audience-grid, .offer-grid, .product-proof { grid-template-columns: 1fr; }
+      .tool-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       .stat, .stat:last-child { border-right: 0; border-bottom: 1px solid var(--line); padding: 16px 0; }
       .stat:last-child { border-bottom: 0; }
       .glass-panel, .orbit-panel { min-height: 470px; border-radius: 18px; }
@@ -733,6 +733,7 @@
       .center-chip { width: 138px; }
       .cert-album { grid-template-columns: 1fr; grid-template-rows: repeat(5, 210px); }
       .cert-tile:first-child { grid-column: span 1; }
+      .tool-card.featured { grid-column: span 1; }
       .modal { padding: 66px 14px 24px; }
       .modal-grid { grid-template-columns: 1fr; }
       .contact-row, .btn { width: 100%; }
@@ -740,11 +741,55 @@
     @media (prefers-reduced-motion: reduce) {
       html { scroll-behavior: auto; }
       *, *::before, *::after { animation-duration: .001ms !important; animation-iteration-count: 1 !important; transition-duration: .001ms !important; }
-      .layer, .portrait-card, .portrait-card img, .story-card, .cert-tile, .finale::before { transform: none !important; }
+      .layer, .portrait-card, .portrait-card img, .cert-tile, .finale::before { transform: none !important; }
+      #particles, #cursor-glow { display: none !important; }
+      .h1-line { overflow: visible !important; }
+      .h1-inner { animation: none !important; }
     }
+
+    /* ── ENHANCED VISUALS ─────────────────────────── */
+    #particles { position: fixed; inset: 0; z-index: -2; pointer-events: none; opacity: .65; }
+    #cursor-glow {
+      position: fixed; width: 700px; height: 700px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(146,204,0,.068) 0%, transparent 62%);
+      pointer-events: none; z-index: 0; transform: translate(-50%,-50%); will-change: left,top;
+    }
+    @media (hover: none) { #cursor-glow { display: none; } }
+
+    /* H1 stagger reveal */
+    .h1-inner { display: block; animation: textReveal .95s cubic-bezier(.16,1,.3,1) both; }
+    .h1-line:nth-child(1) .h1-inner { animation-delay: .08s; }
+    .h1-line:nth-child(2) .h1-inner { animation-delay: .26s; }
+    .h1-line:nth-child(3) .h1-inner { animation-delay: .44s; }
+    @keyframes textReveal { from { transform: translateY(110%); } to { transform: translateY(0); } }
+
+    /* Outline h1 glow pulse */
+    @keyframes outlineGlow {
+      0%,100% { filter: none; }
+      50% { filter: drop-shadow(0 0 14px rgba(207,255,52,.38)); }
+    }
+    .h1-line:nth-child(2) { animation: outlineGlow 5s ease-in-out 1.6s infinite; }
+
+    /* Primary button shimmer */
+    .btn.primary { position: relative; overflow: hidden; }
+    .btn.primary::after {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(105deg, transparent 30%, rgba(255,255,255,.28) 50%, transparent 70%);
+      background-size: 200% 100%;
+      animation: btnShimmer 3.5s ease-in-out infinite;
+    }
+    @keyframes btnShimmer { 0%,100% { background-position: -200% 0; } 50% { background-position: 200% 0; } }
+
+    /* Reveal stagger for story cards */
+    .glass-panel .story-card:nth-child(1) { transition-delay: 0ms; }
+    .glass-panel .story-card:nth-child(2) { transition-delay: 80ms; }
+    .glass-panel .story-card:nth-child(3) { transition-delay: 160ms; }
+    .glass-panel .story-card:nth-child(4) { transition-delay: 240ms; }
   </style>
 </head>
 <body>
+  <canvas id="particles" aria-hidden="true"></canvas>
+  <div id="cursor-glow" aria-hidden="true"></div>
   <div class="progress" id="progress"></div>
 
   <nav class="nav" aria-label="Primary navigation">
@@ -779,12 +824,12 @@
       <div>
         <span class="eyebrow reveal">AI Speaker & Workshop Instructor</span>
         <h1 aria-label="วิทยากรอบรม AI สำหรับองค์กร มหาวิทยาลัย และโรงเรียน">
-          <span class="h1-line">รับสอน AI</span>
-          <span class="h1-line">ประยุกต์ใช้ได้</span>
-          <span class="h1-line">ในชีวิตจริง</span>
+          <span class="h1-line"><span class="h1-inner">รับสอน AI</span></span>
+          <span class="h1-line"><span class="h1-inner">ประยุกต์ใช้ได้</span></span>
+          <span class="h1-line"><span class="h1-inner">ในชีวิตจริง</span></span>
         </h1>
         <p class="hero-copy reveal">
-          สวัสดีครับผมชื่อจั่นเจา ประธานเจ้าหน้าที่ฝ่ายปฏิบัติการ (COO) บริษัท Hectocornlabs รับบรรยายและจัดเวิร์กช็อป AI สำหรับองค์กร มหาวิทยาลัย โรงเรียน และหน่วยงานต่าง ๆ
+          สวัสดีครับผมชื่อจั่นเจา ประธานเจ้าหน้าที่ฝ่ายปฏิบัติการ (COO) บริษัท <a href="https://hectocornlabs.com" target="_blank" rel="noopener" style="color:var(--lime-hi);font-weight:700;text-decoration:underline;text-underline-offset:3px;">Hectocornlabs</a> รับบรรยายและจัดเวิร์กช็อป AI สำหรับองค์กร มหาวิทยาลัย โรงเรียน และหน่วยงานต่าง ๆ
           ตั้งแต่ผู้บริหาร บุคลากร นักศึกษา นักเรียน ไปจนถึงทีม IT และ Developer
           <strong>เน้นเข้าใจง่าย ลงมือทำได้ และเห็น use case ที่เอาไปใช้ต่อได้ทันที</strong>
         </p>
@@ -864,10 +909,10 @@
       <div class="chapter-inner">
         <div class="copy reveal">
           <div class="kicker">เบื้องหลังไม่ใช่แค่สอนตามสไลด์</div>
-          <h2 class="headline">เพื่อให้คนไทยแข่งขันได้ในจุดที่ AI เข้ามาปฏิวัติโลก</h2>
+          <h2 class="headline">เราจะแข่งขันยังไงจุดที่ AI เข้ามาปฏิวัติ</h2>
           <p class="body">
-            จุดเริ่มต้นของผมไม่ใช่แค่การมาสอนใช้ prompt แต่คือการมองเห็นวิกฤตและโอกาส ผมเริ่มสร้าง open-source Thai LLM,
-            agent platform และ AI tools ภายใต้การให้บริการของ Hectocorn labs  เพื่อพิสูจน์ว่า AI ไม่ควรเป็นเรื่องไกลตัวหรือจำกัดอยู่แค่บริษัทใหญ่
+            จุดเริ่มต้นของผมไม่ใช่แค่การมาสอนใช้ prompt แต่คือการมองเห็นวิกฤตและโอกาสจากการมาของ AI ผมเริ่มสร้าง open-source Thai LLM,
+            agent platform และ AI tools ภายใต้การให้บริการของ Hectocornlabs เพื่อพิสูจน์ว่า AI ไม่ควรเป็นเรื่องไกลตัวหรือจำกัดอยู่แค่บริษัทใหญ่
             เวลาสอนจึงไม่ได้เล่าแค่ปุ่มไหนกดอะไร แต่เล่าวิธีคิดของคนที่สร้าง ทดลอง พัง แก้ และเอา AI ไปใช้กับงานจริงมาแล้ว.
           </p>
           <div class="product-proof" aria-label="AI product proof points">
@@ -1048,10 +1093,10 @@
   <footer class="finale" id="contact">
     <div class="finale-inner reveal">
       <div class="kicker">จองคิวอบรม AI</div>
-      <h2>อยากให้ทีมเริ่มใช้ AI มาคุยรายละเอียดกัน</h2>
+      <h2>สามารถติดต่อขอรายละเอียดเพิ่มเติมได้ฟรี</h2>
       <p>
-        เหมาะกับงานบรรยายองค์กร เวิร์กช็อปภายใน งานสัมมนา คลาสมหาวิทยาลัย ค่ายนักเรียน
-        หรือ session เฉพาะทีมเทคนิค สามารถปรับระดับความลึก เนื้อหา และตัวอย่างให้เข้ากับผู้ฟัง.
+        งานบรรยายองค์กร เวิร์กช็อปภายใน งานสัมมนา คลาสมหาวิทยาลัย ค่ายนักเรียน
+        หรือ session เฉพาะทีมเทคนิค สามารถปรับระดับความลึก เนื้อหา และตัวอย่างให้เข้ากับผู้ฟังได้ตามความต้องการ
       </p>
       <div class="contact-row">
         <a class="btn primary" href="mailto:paphatchai.s@hectocornlabs.com">paphatchai.s@hectocornlabs.com</a>
@@ -1088,7 +1133,6 @@
     const layers = [...document.querySelectorAll("[data-speed]")];
     const portrait = document.getElementById("portrait");
     const portraitImg = portrait?.querySelector("img");
-    const cards = [...document.querySelectorAll(".story-card")];
     const certs = [...document.querySelectorAll(".cert-tile")];
     const finale = document.querySelector(".finale");
     const certModal = document.getElementById("certModal");
@@ -1110,12 +1154,6 @@
 
       if (portrait) portrait.style.setProperty("--portrait-y", `${scrollY * -0.04}px`);
       if (portraitImg) portraitImg.style.setProperty("--img-y", `${scrollY * 0.032}px`);
-
-      cards.forEach((card, index) => {
-        const rect = card.getBoundingClientRect();
-        const local = clamp((window.innerHeight - rect.top) / (window.innerHeight + rect.height), 0, 1);
-        card.style.setProperty("--card-y", `${(local - .5) * (index % 2 ? 20 : -20)}px`);
-      });
 
       certs.forEach((cert, index) => {
         const rect = cert.getBoundingClientRect();
@@ -1174,6 +1212,87 @@
     }, { passive: true });
     window.addEventListener("resize", updateParallax);
     updateParallax();
+
+    /* ── ENHANCED EFFECTS ──────────────────────────── */
+    const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    /* Particles canvas */
+    const cvs = document.getElementById("particles");
+    if (cvs && !prefersReduced) {
+      const ctx2 = cvs.getContext("2d");
+      const pts = [];
+      function resizeCvs() { cvs.width = window.innerWidth; cvs.height = window.innerHeight; }
+      resizeCvs();
+      window.addEventListener("resize", resizeCvs);
+      for (let i = 0; i < 52; i++) pts.push({
+        x: Math.random() * cvs.width, y: Math.random() * cvs.height,
+        vx: (Math.random() - .5) * .26, vy: (Math.random() - .5) * .26,
+        r: Math.random() * 1.3 + .4
+      });
+      (function drawPts() {
+        ctx2.clearRect(0, 0, cvs.width, cvs.height);
+        pts.forEach(p => {
+          p.x = (p.x + p.vx + cvs.width) % cvs.width;
+          p.y = (p.y + p.vy + cvs.height) % cvs.height;
+          ctx2.beginPath(); ctx2.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+          ctx2.fillStyle = "rgba(146,204,0,.55)"; ctx2.fill();
+        });
+        for (let i = 0; i < pts.length; i++) for (let j = i + 1; j < pts.length; j++) {
+          const dx = pts[i].x - pts[j].x, dy = pts[i].y - pts[j].y;
+          const d = Math.hypot(dx, dy);
+          if (d < 128) {
+            ctx2.beginPath(); ctx2.moveTo(pts[i].x, pts[i].y); ctx2.lineTo(pts[j].x, pts[j].y);
+            ctx2.strokeStyle = `rgba(146,204,0,${(1 - d / 128) * .09})`; ctx2.lineWidth = .8; ctx2.stroke();
+          }
+        }
+        requestAnimationFrame(drawPts);
+      })();
+    }
+
+    /* Cursor glow + portrait tilt in one loop */
+    const glow = document.getElementById("cursor-glow");
+    if (!prefersReduced) {
+      let cx = window.innerWidth / 2, cy = window.innerHeight / 2, tx = cx, ty = cy;
+      let tilX = 0, tilY = 0, tilS = 1, tarX = 0, tarY = 0, tarS = 1;
+      document.addEventListener("mousemove", e => { tx = e.clientX; ty = e.clientY; });
+      if (portrait) {
+        portrait.addEventListener("mousemove", e => {
+          const r = portrait.getBoundingClientRect();
+          tarX = (e.clientX - r.left) / r.width - .5;
+          tarY = (e.clientY - r.top) / r.height - .5;
+          tarS = 1.03;
+        });
+        portrait.addEventListener("mouseleave", () => { tarX = 0; tarY = 0; tarS = 1; });
+      }
+      (function loop() {
+        if (glow) { cx += (tx - cx) * .1; cy += (ty - cy) * .1; glow.style.left = cx + "px"; glow.style.top = cy + "px"; }
+        if (portrait) {
+          tilX += (tarX - tilX) * .12; tilY += (tarY - tilY) * .12; tilS += (tarS - tilS) * .12;
+          portrait.style.setProperty("--tilt-x", `${tilX * 14}deg`);
+          portrait.style.setProperty("--tilt-y", `${tilY * -9}deg`);
+          portrait.style.setProperty("--tilt-scale", tilS);
+        }
+        requestAnimationFrame(loop);
+      })();
+    }
+
+    /* Counter animation */
+    function animCount(el) {
+      const raw = el.textContent.trim();
+      const num = parseInt(raw, 10);
+      const suffix = raw.replace(/[0-9]/g, "");
+      const dur = 1400, t0 = performance.now();
+      const ease = t => 1 - Math.pow(1 - t, 3);
+      (function tick(now) {
+        const t = Math.min((now - t0) / dur, 1);
+        el.textContent = Math.floor(ease(t) * num) + suffix;
+        if (t < 1) requestAnimationFrame(tick);
+      })(t0);
+    }
+    const cntObs = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) { animCount(e.target); cntObs.unobserve(e.target); } });
+    }, { threshold: 0.9 });
+    document.querySelectorAll(".stat strong").forEach(el => cntObs.observe(el));
   </script>
 </body>
 </html>
