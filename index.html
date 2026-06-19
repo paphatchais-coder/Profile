@@ -122,7 +122,7 @@
     }
     .brand strong { display: block; font-size: 13px; line-height: 1.2; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .brand em { display: block; color: var(--dim); font: normal 700 10px/1.2 var(--mono); letter-spacing: .16em; text-transform: uppercase; }
-    .nav-links { display: flex; gap: 18px; color: var(--muted); font: 700 11px/1 var(--mono); letter-spacing: .08em; text-transform: uppercase; }
+    .nav-links { display: flex; gap: 18px; color: var(--muted); font: 700 16px/1 var(--mono); letter-spacing: .08em; text-transform: uppercase; }
     .nav-links a { transition: color .2s ease; }
     .nav-links a:hover { color: var(--lime-hi); }
 
@@ -698,7 +698,7 @@
     .reveal.in-view { opacity: 1; transform: translateY(0); }
 
     @media (max-width: 920px) {
-      .nav-links { display: none; }
+      .nav-links a:not(:last-child) { display: none; }
       .hero-wrap, .chapter-inner, .chapter:nth-of-type(even) .chapter-inner { grid-template-columns: 1fr; }
       .chapter:nth-of-type(even) .copy { order: initial; }
       .portrait-card, .portrait-card img { min-height: 520px; }
@@ -1100,7 +1100,7 @@
       </p>
       <div class="contact-row">
         <a class="btn primary" href="mailto:paphatchai.s@hectocornlabs.com">paphatchai.s@hectocornlabs.com</a>
-        <a class="btn" href="tel:0915951934">091-595-1934</a>
+        <a class="btn" href="tel:0655088351 ">091-595-1934</a>
         <a class="btn" href="profile.html">ดู Profile แบบเต็ม</a>
       </div>
     </div>
